@@ -3,22 +3,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-<!-- Latest compiled and minified JavaScript -->
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
-
-
     <title>옷가게</title>
-
-      
-      
     <style>
-    
     .firstCenter{
       text-align: center;
     }
@@ -41,12 +27,10 @@
      .head{
        font-size: 12px;
      }
-    
-   
     </style>
     </head>
   <body>
-    
+    <jsp:include page="../header.jsp" flush="false" />
     <div class="container"> 
       <div class="row ">
         <div class="center-block" style="width: 55%;">
@@ -56,36 +40,23 @@
     <br/>
     <br/><br/><br/>
         <label style="font-size: 26px;">비밀번호 찾기</label>
-    
     </div>
-    <br/><br/><br/><br/><br/>
     <div class="box" >
       <label class="size"></label>
-     
         <div class="form-group has-success">
-            <label class="control-label" for="inputSuccess1" style="color: black;">귀하의 계정을 만드는 데 사용한 이메일 주소를 입력하십시오. 
-                <br/><br/>귀하의 비밀번호를 재설정할 수 있는 링크를 보내드립니다.
-            </label>
-            <br/><br/>
-            <label style="font-size: 24px;">이메일<label style="color: red; size: 5px;">*</label></label>
+            <p class="control-label" for="inputSuccess1" style="color: black;">귀하의 계정을 만드는 데 사용한 이메일 주소를 입력하십시오. 귀하의 비밀번호를 재설정할 수 있는 링크를 보내드립니다.
+            </p>
          </div>
-           <form action="updatePass" method="post">
+           <form action="/updatePass" method="post">
+            <label style="font-size: 24px;" for="inputSuccess1">이메일</label>
             <input type="text" class="form-control" id="inputSuccess1" name="user_email">
             <br/>          
-           <button type="submit" class="btn btn-primary btn-lg" style="color: white; background-color: black;">비밀번호 찾기</button> 
+           <button type="submit" class="btn btn-lg rounded-0 text-white" style="color: white; background-color: black;">비밀번호 찾기</button> 
           </form>
-    
-    </div>  
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-  </div>
-  </div>
-  </div>
-  
-  
- 
+         </div>  
+       </div>
+     </div>
+    </div>
+    <jsp:include page="../footer.jsp" flush="false" />
   </body>
 </html>

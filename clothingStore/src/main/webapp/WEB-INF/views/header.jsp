@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%-- <% session.setAttribute("email", "test"); %> --%>
 <!doctype html>
 <html lang="en">
   <head>
@@ -10,12 +9,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">	
-	
-	<!-- slick -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">   
+   
+   <!-- slick -->
     <title>메인</title>
 
-    <style>        
+    <style>
+    	.btn:focus{
+    		box-shadow:none;    		
+    	}
+    	.dropdown-item:active{
+    		background-color:unset;
+    		color:#222;
+    	}
         .header-wrap{
           max-width: 100%;
           background-color: #FAF9F8;
@@ -65,12 +71,20 @@
         .navbar-light .navbar-nav .nav-link {
             color: rgb(0, 0, 0);
         }
-        .header-wrap .nav-item > .dropdown-menu{
+        .header-wrap .header-nav-item > .dropdown-menu{
           width: 100%;
           text-align: center;
           padding-top:38px;
+          padding-bottom:20px;
           border: 0;
           background-color: #FAF9F8;
+          z-index: 1200;
+        }
+        .header-dropdown-title{
+        	padding-bottom:0;
+        }
+        .dropdown-menu-box{
+        	font-size:13px;
         }
         .header-wrap .dropdown-item,.nav-link{
           font-weight: bold;
@@ -81,7 +95,7 @@
         .searchbox{
           position: absolute;
           right: 45px;
-          bottom: 10px;
+          bottom: 0px;
         }
         .searchbar{
           padding: 10px 20px 8px 30px;
@@ -140,10 +154,13 @@
           right: 30px;
           top: -20px;
         }
-        .btn-group > a{
+        .btn-group > button{
           width: auto;
           font-size: small;
           font-weight: bold;
+        }
+        .btn-group > button:focus{
+          box-shadow: none;
         }
         .btn-group > .cart:before{
           width: 20px;
@@ -171,12 +188,38 @@
           background-repeat: no-repeat;
           margin: 0 5px;
         }
-        .header-wrap .nav-item:hover > .dropdown-menu{
+        .dropdown-menu{
+        	z-index:1300 !important;
+        }
+        .header-wrap .header-nav-item:hover > .dropdown-menu{
           display:block;
         }
         .header-wrap .btn-group:hover > .dropdown-menu{
           display: block;
         }
+        .header-login-btn{
+        	background-color:#222;
+        	font-weight:600;
+        	font-size:13px;
+        }
+        .dropdown-forgot{
+        	font-size:13px !important;
+        }
+        .dropdown-signup{
+        	font-size:11px !important;
+        }
+        .required-field{
+        	font-size:13px;
+        }
+        .required-field:after {
+		    content: "*";
+		    color: #d6001c;
+		    font-size:13px;
+		    margin-left:2px
+		}
+		.dropdown-menu-login{
+			font-weight: 600;
+		}
     </style>
   </head>
   <body>
@@ -187,128 +230,129 @@
               <a class="header_logo" href="/"></a>
               <!-- 로그인 / 장바구니 -->
               <div class="menu_login_cart">
-                <div class="btn-group">
-                  <a type="button" class="btn dropdown-toggle login" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    로그인
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <form class="px-4 py-3">
+               <div class="btn-group">
+               	<%
+					if ( session.getAttribute("email") != null ){	
+				%>
+
+				<button class="btn dropdown-toggle login" onclick="location.href='/myPage';" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   내 계정
+                </button>
+                  <div class="dropdown-menu dropdown-menu-right">             
+                    <a class="dropdown-item" href="/myPage">내 계정</a>
+                    <a class="dropdown-item" href="/customer">도움이 필요하세요?</a>
+                    <a class="dropdown-item" href="/logout">로그아웃</a>
+                  </div>  
+                  </div>  
+                <%
+				 }  else if ( session.getAttribute("manager") != null ){
+                %>
+                  <button class="btn dropdown-toggle login" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   관리자 계정
+                  </button>
+                  	<div class="dropdown-menu dropdown-menu-right">            
+	                    <a class="dropdown-item" href="/adminQna">관리자 페이지</a>
+	                    <a class="dropdown-item" href="/logout">로그아웃</a>
+                  	</div>  
+                 </div>
+				<%
+					}else{
+				%>    
+                  <div class="btn-group">
+					<button class="btn dropdown-toggle login" href="/login" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="location.href='/login';">
+                    	로그인
+                  	</button>
+                  	
+                  	<div class="dropdown-menu dropdown-menu-right rounded-0 border-0 shadow-sm dropdown-menu-login">
+                    <form class="px-4 py-3" action="/loginForm" method="post">
                       <div class="form-group">
-                        <label for="exampleDropdownFormEmail1">Email address</label>
-                        <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">
+                        <label for="exampleDropdownFormEmail1" class="required-field">이메일</label>
+                        <input type="email" name="user_email" class="form-control rounded-0" id="exampleDropdownFormEmail1" placeholder="이메일">
                       </div>
                       <div class="form-group">
-                        <label for="exampleDropdownFormPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
+                        <label for="exampleDropdownFormPassword1" class="required-field">비밀번호</label>
+                        <input type="password" name="user_password" class="form-control rounded-0" id="exampleDropdownFormPassword1" placeholder="비밀번호">
                       </div>
                       <div class="form-group">
                         <div class="form-check">
                           <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                          <label class="form-check-label" for="dropdownCheck">
-                            Remember me
+                          <label class="form-check-label" for="dropdownCheck" style="font-size:11px;">
+                            비밀번호 기억하기
                           </label>
                         </div>
                       </div>
-                      <button type="submit" class="btn btn-primary">Sign in</button>
+                      <button type="submit" class="btn text-white header-login-btn rounded-0 btn-block">로그인</button>
                     </form>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">New around here? Sign up</a>
-                    <a class="dropdown-item" href="#">Forgot password?</a>
-                  </div>
-  
-                  <a type="button" class="btn cart" href="/cart">
-                    장바구니
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <form class="px-4 py-3">
-                      <div class="form-group">
-                        <label for="exampleDropdownFormEmail1">Email address</label>
-                        <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleDropdownFormPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
-                      </div>
-                      <div class="form-group">
-                        <div class="form-check">
-                          <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                          <label class="form-check-label" for="dropdownCheck">
-                            Remember me
-                          </label>
-                        </div>
-                      </div>
-                      <button type="submit" class="btn btn-primary">Sign in</button>
-                    </form>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">New around here? Sign up</a>
-                    <a class="dropdown-item" href="#">Forgot password?</a>
-                  </div>
+                    <a class="dropdown-item dropdown-forgot" href="/sendEmail">비밀번호를 잊어버리셨나요?</a>
+                    <a class="dropdown-item dropdown-signup" href="/userSignUp">아직 계정이 없으세요? 여기서 가입하세요!</a>
+                  	</div>  
+                 </div>
                 </div>
+				<%
+					} 
+				%> 
+                <div class="btn-group">
+	                <button type="button" class="btn cart" onclick = "location.href = '/cart'">
+	                  장바구니
+	                </button>  
+                </div>
+                
               </div>
               <!-- 고객센터 -->
               <div class="menu_service">
-                <a href="">고객 서비스</a>
+                <a href="/customer">고객 서비스</a>
               </div>
               <!-- 네비게이션 바 -->
               <nav class="navbar navbar-expand-lg navbar-light bg-light">                
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                   <ul class="navbar-nav ml-auto mr-auto">                    
-                    <li class="nav-item">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <li class="header-nav-item">
+                      <a class="nav-link dropdown-toggle header-dropdown-title" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         여성
                       </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <div class="dropdown-menu dropdown-menu-box" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/men/">셔츠&블라우스</a>
                         <a class="dropdown-item" href="#">드레스</a>                        
                         <a class="dropdown-item" href="#">탑&티셔츠</a>
                       </div>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <li class="header-nav-item">
+                      <a class="nav-link dropdown-toggle header-dropdown-title" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         남성
                       </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/productList/200/202">티셔츠&탱크탑</a>
+                      <div class="dropdown-menu dropdown-menu-box" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/productList/202">티셔츠&탱크탑</a>
                         <a class="dropdown-item" href="#">후디&스웨트셔츠</a>
                         <a class="dropdown-item" href="#">셔츠</a>
                       </div>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <li class="header-nav-item">
+                      <a class="nav-link dropdown-toggle header-dropdown-title" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         유아동
                       </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <div class="dropdown-menu dropdown-menu-box" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="#">신생아</a>
                         <a class="dropdown-item" href="#">여아</a>
                         <a class="dropdown-item" href="#">남아</a>
                       </div>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">지속가능성</a>
+                    <li class="header-nav-item">
+                      <a class="nav-link header-dropdown-title" href="#">지속가능성</a>
                     </li>
                   </ul>
-                  <form class="form-inline my-2 my-lg-0 searchbox">
-                    <input class="form-control searchbar" type="search" placeholder="제품 검색" aria-label="Search">
+                  <form class="form-inline my-2 my-lg-0 searchbox" action="/searchProduct" method="get">
+                    <input class="form-control searchbar" name="keyword" type="search" placeholder="제품 검색" aria-label="Search">
                     <button class="searchbtn" type="submit"></button>
                   </form>
                 </div>
               </nav>
-          </div>  
-      </header>
-    </div>    
-
+		</header>
     <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->    
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 	<!-- 카트 버튼 -->
-	<script type="text/javascript">
-		$(.cart).click(function(e){
-	
-	        e.target
-	
-		})
-	</script>
   </body>
 </html>
