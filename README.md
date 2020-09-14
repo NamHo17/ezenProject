@@ -16,7 +16,8 @@
 >>* Spring Boot
 >>* MyBatis
 >5. 개발 언어 및 라이브러리
->>* JAVA(JDK1.8)
+>>* JAVA 
+>>* Development Kit: JDK1.8
 >>* JSP
 >>* CSS   
 >>* HTML
@@ -24,7 +25,7 @@
 >>* Ajax
 >>* BootStrap4
 >6. 서버 및 데이터베이스
->>* Tomcat8.5
+>>* Tomcat 8.5
 >>* MySQL
 >7. 웹 쇼핑몰 소개
 >>* 온라인 패션 쇼핑몰, H&M을 모티브로 개발 한 웹 쇼핑몰 입니다.
